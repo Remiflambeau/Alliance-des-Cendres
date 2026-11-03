@@ -64,17 +64,26 @@
 <script>
 /* ============================================================
    CONFIGURATION — c'est ici qu'on ajoute les PDF.
-   Déposez vos fichiers PDF à la racine du dépôt, à côté de ce
+   Déposez vos fichiers dans un dossier "pdfs/" à côté de ce
    fichier index.html, puis ajoutez une entrée par document :
    { titre, categorie, fichier (chemin), description (optionnel) }
    ============================================================ */
 const DOCS = [
-  { titre: "Alliance des Cendres — présentation", categorie: "Alliance", fichier: "Alliance des Cendres.pdf" },
+  { titre: "Alliance des Cendres — présentation", categorie: "Alliance", fichier: "Alliance des Cendres .pdf" },
+  { titre: "PNJs de l'Alliance des Cendres", categorie: "PNJ", fichier: "Pnjs de l'Alliance des Cendres.pdf" },
   { titre: "Constantin Flambeau", categorie: "Personnages", fichier: "Constantin Flambeau.pdf" },
-  { titre: "Armand le colosse", categorie: "Personnages", fichier: "Armand le colosse.pdf" },
-  { titre: "Aurélie de Garceron", categorie: "Personnages", fichier: "Aurelie de Garceron.pdf" },
-  { titre: "Auriana", categorie: "Personnages", fichier: "Auriana.pdf" },
-  { titre: "Clotilde Quaesitor", categorie: "Personnages", fichier: "Clotilde Quaesitor.pdf" },
+  { titre: "Armand le colosse", categorie: "Personnages", fichier: "Armand le colosse .pdf" },
+  { titre: "Aurélie de Garceron", categorie: "Personnages", fichier: "Aurelie de Garceron .pdf" },
+  { titre: "Auriana", categorie: "Personnages", fichier: "Auriana .pdf" },
+  { titre: "Clotilde Quaesitor", categorie: "Personnages", fichier: "Clotilde Quaesitor .pdf" },
+  { titre: "Cyril de Vergy", categorie: "Personnages", fichier: "Cyril de Vergy.pdf" },
+  { titre: "Gisèle joueuse de couteaux", categorie: "Personnages", fichier: "Gisele joueuse de couteaux .pdf" },
+  { titre: "Hubert Bjornaer", categorie: "Personnages", fichier: "Hubert Bjornaer.pdf" },
+  { titre: "Minerva", categorie: "Personnages", fichier: "Minerva .pdf" },
+  { titre: "Pietro", categorie: "Personnages", fichier: "Pietro .pdf" },
+  { titre: "Thibault", categorie: "Personnages", fichier: "Thibault.pdf" },
+  { titre: "Jacques dents moisies", categorie: "PNJ", fichier: "Jacques dents moisies .pdf" },
+  { titre: "Toque Rouge — Alois de Blois", categorie: "PNJ", fichier: "Toque Rouge Alois de Blois.pdf" },
 ];
 
 /* -------- Rien à modifier ci-dessous -------- */
@@ -135,6 +144,6 @@ searchEl.addEventListener("input", render);
 render();
 </script>
 
-<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" nonce="jNl/ZQhQKSgd+maJ3Af+Tw==" data-cf-beacon='{"version":"2024.11.0","token":"36b4216ae2dc4d5488c249161e71fe1e","spa":2}' crossorigin="anonymous"></script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" nonce="Wj637QF+dCJzpXt6VCEvVg==" data-cf-beacon='{"version":"2024.11.0","token":"36b4216ae2dc4d5488c249161e71fe1e","spa":2}' crossorigin="anonymous"></script>
 </body>
 </html>
