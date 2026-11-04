@@ -15,6 +15,7 @@
   h1 { font-size: 1.7rem; letter-spacing: .5px; }
   h1 span { color: var(--accent); }
   .subtitle { color: var(--muted); font-style: italic; font-size: .95rem; }
+  .intro { margin-top: 14px; max-width: 720px; color: var(--text); font-size: .92rem; line-height: 1.55; border-left: 3px solid var(--accent); padding: 6px 14px; background: var(--panel); }
   .controls { padding: 16px 24px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; border-bottom: 1px solid var(--line); background: var(--panel); }
   #blocRow { padding: 10px 24px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; border-bottom: 1px solid var(--line); background: var(--panel); }
   #blocRow .label, #catsRow .label { color: var(--muted); font-size: .8rem; text-transform: uppercase; letter-spacing: 1px; margin-right: 4px; }
@@ -48,6 +49,7 @@
   <div>
     <h1>Saga <span>Alliance des Cendres</span></h1>
     <p class="subtitle">Aides de jeu et documents de campagne — clic pour prévisualiser, lien pour télécharger.</p>
+    <p class="intro">Passionné de longue date du jeu de rôle <strong>Ars Magica</strong>, avec la cinquième édition dite « définitive », nous vous proposons ici une Alliance prête à jouer, des personnages prétirés, des aides de jeu. Nous proposons également des scénarios — traduction, création ou adaptation (avec l'accord des auteurs), sous la <a href="https://atlas-games.com/arsmagica/openars" style="color:var(--accent)">licence ouverte Ars Magica</a> (CC BY-SA 4.0) d'Atlas Games.</p>
   </div>
 </header>
 
@@ -69,7 +71,7 @@
   </div>
 </div>
 
-<footer>Questions, remarques ou coquilles ? Écrivez à Rémi : <a href="mailto:remi.lamouroux@free.fr">remi.lamouroux@free.fr</a></footer>
+<footer>Questions, remarques ou coquilles ? Écrivez-nous : <a href="mailto:alliancesdescendres@proton.me">alliancesdescendres@proton.me</a></footer>
 
 <script>
 /* ============================================================
@@ -182,5 +184,6 @@ searchEl.addEventListener("input", render);
 render();
 </script>
 
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" nonce="127s+QbPbuvHfdx9t8Oa2Q==" data-cf-beacon='{"version":"2024.11.0","token":"36b4216ae2dc4d5488c249161e71fe1e","spa":2}' crossorigin="anonymous"></script>
 </body>
 </html>
