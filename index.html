@@ -16,12 +16,16 @@
   h1 span { color: var(--accent); }
   .subtitle { color: var(--muted); font-style: italic; font-size: .95rem; }
   .controls { padding: 16px 24px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; border-bottom: 1px solid var(--line); background: var(--panel); }
+  #blocRow { padding: 10px 24px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; border-bottom: 1px solid var(--line); background: var(--panel); }
+  #blocRow .label, #catsRow .label { color: var(--muted); font-size: .8rem; text-transform: uppercase; letter-spacing: 1px; margin-right: 4px; }
+  #catsRow { padding: 0 24px 12px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; border-bottom: 1px solid var(--line); background: var(--panel); }
   input[type="search"] { flex: 1; min-width: 220px; padding: 9px 14px; border-radius: 6px; border: 1px solid var(--line); background: var(--panel2); color: var(--text); font-size: 1rem; }
   .chip { padding: 7px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--panel2); color: var(--muted); cursor: pointer; font-size: .9rem; }
   .chip.active { background: var(--accent); border-color: var(--accent); color: #14161b; font-weight: bold; }
-  .layout { display: grid; grid-template-columns: minmax(300px, 420px) 1fr; gap: 0; min-height: calc(100vh - 120px); }
+  .chip.small { padding: 4px 11px; font-size: .8rem; }
+  .layout { display: grid; grid-template-columns: minmax(300px, 420px) 1fr; gap: 0; min-height: calc(100vh - 220px); }
   @media (max-width: 800px) { .layout { grid-template-columns: 1fr; } #preview { height: 60vh; } }
-  #list { border-right: 1px solid var(--line); max-height: calc(100vh - 120px); overflow-y: auto; }
+  #list { border-right: 1px solid var(--line); max-height: calc(100vh - 220px); overflow-y: auto; }
   .doc { padding: 14px 20px; border-bottom: 1px solid var(--line); cursor: pointer; }
   .doc:hover { background: var(--panel); }
   .doc.selected { background: var(--panel2); border-left: 4px solid var(--accent); }
@@ -34,6 +38,8 @@
   #preview iframe { width: 100%; height: 100%; border: 0; background: #2a2e37; }
   #previewHint { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: var(--muted); font-style: italic; padding: 24px; text-align: center; }
   .count { color: var(--muted); font-size: .85rem; padding: 10px 20px; border-bottom: 1px solid var(--line); }
+  footer { text-align: center; color: var(--muted); font-size: .85rem; padding: 14px 20px; border-top: 1px solid var(--line); }
+  footer a { color: var(--accent); text-decoration: none; }
 </style>
 </head>
 <body>
@@ -47,8 +53,10 @@
 
 <div class="controls">
   <input type="search" id="search" placeholder="Rechercher un document…" />
-  <div id="cats"></div>
 </div>
+
+<div id="blocRow"><span class="label">Rubrique</span><span id="blocs"></span></div>
+<div id="catsRow"><span class="label">Catégorie</span><span id="cats"></span></div>
 
 <div class="layout">
   <div>
@@ -61,63 +69,93 @@
   </div>
 </div>
 
+<footer>Questions, remarques ou coquilles ? Écrivez à Rémi : <a href="mailto:remi.lamouroux@free.fr">remi.lamouroux@free.fr</a></footer>
+
 <script>
 /* ============================================================
    CONFIGURATION — c'est ici qu'on ajoute les PDF.
    Déposez vos fichiers PDF à la racine du dépôt, à côté de ce
    fichier index.html, puis ajoutez une entrée par document :
-   { titre, categorie, fichier (chemin), description (optionnel) }
+   { titre, bloc, categorie, fichier }
+   Le "bloc" est la grande rubrique (Scénarios, Personnages...),
+   la "categorie" est le sous-menu à l'intérieur du bloc.
    ============================================================ */
 const DOCS = [
-  { titre: "Alliance des Cendres — présentation", categorie: "Alliance des Cendres", fichier: "Alliance des Cendres .pdf" },
-  { titre: "PNJs de l'Alliance des Cendres", categorie: "Alliance des Cendres", fichier: "Pnjs de l'Alliance des Cendres.pdf" },
-  { titre: "Constantin Flambeau", categorie: "Mages", fichier: "Constantin Flambeau.pdf" },
-  { titre: "Clotilde Quaesitor", categorie: "Mages", fichier: "Clotilde Quaesitor .pdf" },
-  { titre: "Hubert Bjornaer", categorie: "Mages", fichier: "Hubert Bjornaer.pdf" },
-  { titre: "Cyril de Vergy", categorie: "Compagnons", fichier: "Cyril de Vergy.pdf" },
-  { titre: "Aurélie de Garceron", categorie: "Compagnons", fichier: "Aurelie de Garceron .pdf" },
-  { titre: "Thibault", categorie: "Compagnons", fichier: "Thibault.pdf" },
-  { titre: "Armand le colosse", categorie: "Grogs", fichier: "Armand le colosse .pdf" },
-  { titre: "Gisèle joueuse de couteaux", categorie: "Grogs", fichier: "Gisele joueuse de couteaux .pdf" },
-  { titre: "Jacques dents moisies", categorie: "Grogs", fichier: "Jacques dents moisies .pdf" },
-  { titre: "Minerva", categorie: "Grogs", fichier: "Minerva .pdf" },
-  { titre: "Auriana", categorie: "Grogs", fichier: "Auriana .pdf" },
-  { titre: "Pietro", categorie: "Grogs", fichier: "Pietro .pdf" },
-  { titre: "Toque Rouge — Alois de Blois", categorie: "PNJ divers", fichier: "Toque Rouge Alois de Blois.pdf" },
+  { titre: "Alliance des Cendres — présentation", bloc: "Alliance des Cendres", categorie: "Alliance des Cendres", fichier: "Alliance des Cendres .pdf" },
+  { titre: "PNJs de l'Alliance des Cendres", bloc: "Alliance des Cendres", categorie: "Alliance des Cendres", fichier: "Pnjs de l'Alliance des Cendres.pdf" },
+  { titre: "Constantin Flambeau", bloc: "Personnages", categorie: "Mages", fichier: "Constantin Flambeau.pdf" },
+  { titre: "Clotilde Quaesitor", bloc: "Personnages", categorie: "Mages", fichier: "Clotilde Quaesitor .pdf" },
+  { titre: "Hubert Bjornaer", bloc: "Personnages", categorie: "Mages", fichier: "Hubert Bjornaer.pdf" },
+  { titre: "Cyril de Vergy", bloc: "Personnages", categorie: "Compagnons", fichier: "Cyril de Vergy.pdf" },
+  { titre: "Aurélie de Garceron", bloc: "Personnages", categorie: "Compagnons", fichier: "Aurelie de Garceron .pdf" },
+  { titre: "Thibault", bloc: "Personnages", categorie: "Compagnons", fichier: "Thibault.pdf" },
+  { titre: "Armand le colosse", bloc: "Personnages", categorie: "Grogs", fichier: "Armand le colosse .pdf" },
+  { titre: "Gisèle joueuse de couteaux", bloc: "Personnages", categorie: "Grogs", fichier: "Gisele joueuse de couteaux .pdf" },
+  { titre: "Jacques dents moisies", bloc: "Personnages", categorie: "Grogs", fichier: "Jacques dents moisies .pdf" },
+  { titre: "Minerva", bloc: "Personnages", categorie: "Grogs", fichier: "Minerva .pdf" },
+  { titre: "Auriana", bloc: "Personnages", categorie: "Grogs", fichier: "Auriana .pdf" },
+  { titre: "Pietro", bloc: "Personnages", categorie: "Grogs", fichier: "Pietro .pdf" },
+  { titre: "Toque Rouge — Alois de Blois", bloc: "Personnages", categorie: "PNJ divers", fichier: "Toque Rouge Alois de Blois.pdf" },
+  { titre: "Langue de vipère", bloc: "Scénarios", categorie: "Tales of the Dark Ages", fichier: "Langue de vipère.pdf" },
+  { titre: "Héritage", bloc: "Scénarios", categorie: "Tales of the Dark Ages", fichier: "Heritage Ars Magica.pdf" },
+  { titre: "Bosquet des crânes", bloc: "Scénarios", categorie: "Tales of the Dark Ages", fichier: "Bosquet de Cranes.pdf" },
+  { titre: "La Goule de Saint Lazare", bloc: "Scénarios", categorie: "Tales of the Dark Ages", fichier: "La goule de Saint Lazarre.pdf" },
+  { titre: "Beaucoup de bruit pour rien", bloc: "Scénarios", categorie: "Casus Belli", fichier: "Beaucoup de bruit pour rien.pdf" },
+  { titre: "Le Fou de Dieu", bloc: "Scénarios", categorie: "Casus Belli", fichier: "Le Fou de Dieu.pdf" },
+  { titre: "Aide de jeu — Langue de vipère", bloc: "Aides de jeu", categorie: "Tales of the Dark Ages", fichier: "Aides de jeux Langue de Vipere.pdf" },
+  { titre: "Aide de jeu — Héritage", bloc: "Aides de jeu", categorie: "Tales of the Dark Ages", fichier: "Aide de jeu Héritage.pdf" },
+  { titre: "Aide de jeu — Bosquet des crânes", bloc: "Aides de jeu", categorie: "Tales of the Dark Ages", fichier: "Aide de jeu Bosquet des cranes.pdf" },
+  { titre: "Aide de jeu — La Goule de Saint Lazare", bloc: "Aides de jeu", categorie: "Tales of the Dark Ages", fichier: "Aides de jeux Goule de Saint Lazare.pdf" },
 ];
 
 /* -------- Rien à modifier ci-dessous -------- */
 const searchEl = document.getElementById("search");
+const blocsEl = document.getElementById("blocs");
 const catsEl = document.getElementById("cats");
 const listEl = document.getElementById("list");
 const countEl = document.getElementById("count");
 const viewer = document.getElementById("viewer");
 const hint = document.getElementById("previewHint");
+let activeBloc = "Tous";
 let activeCat = "Tous";
 let selected = null;
 
-const categories = ["Tous", ...Array.from(new Set(DOCS.map(d => d.categorie)))];
+const blocs = ["Tous", ...Array.from(new Set(DOCS.map(d => d.bloc)))];
 
-function chips() {
+function catsFor(bloc) {
+  if (bloc === "Tous") return Array.from(new Set(DOCS.map(d => d.categorie)));
+  return Array.from(new Set(DOCS.filter(d => d.bloc === bloc).map(d => d.categorie)));
+}
+
+function renderChips() {
+  blocsEl.innerHTML = "";
+  blocs.forEach(b => {
+    const el = document.createElement("button");
+    el.className = "chip" + (b === activeBloc ? " active" : "");
+    el.textContent = b;
+    el.onclick = () => { activeBloc = b; activeCat = "Tous"; render(); };
+    blocsEl.appendChild(el);
+  });
   catsEl.innerHTML = "";
-  categories.forEach(c => {
-    const b = document.createElement("button");
-    b.className = "chip" + (c === activeCat ? " active" : "");
-    b.textContent = c;
-    b.onclick = () => { activeCat = c; render(); };
-    catsEl.appendChild(b);
+  ["Tous", ...catsFor(activeBloc)].forEach(c => {
+    const el = document.createElement("button");
+    el.className = "chip small" + (c === activeCat ? " active" : "");
+    el.textContent = c;
+    el.onclick = () => { activeCat = c; render(); };
+    catsEl.appendChild(el);
   });
 }
 
 function matches(d) {
   const q = searchEl.value.trim().toLowerCase();
+  const okBloc = activeBloc === "Tous" || d.bloc === activeBloc;
   const okCat = activeCat === "Tous" || d.categorie === activeCat;
-  const okQ = !q || (d.titre + " " + (d.description || "") + " " + d.categorie).toLowerCase().includes(q);
-  return okCat && okQ;
+  const okQ = !q || (d.titre + " " + d.bloc + " " + d.categorie).toLowerCase().includes(q);
+  return okBloc && okCat && okQ;
 }
 
 function render() {
-  chips();
+  renderChips();
   listEl.innerHTML = "";
   const shown = DOCS.filter(matches);
   countEl.textContent = shown.length + " document" + (shown.length > 1 ? "s" : "");
@@ -126,7 +164,7 @@ function render() {
     div.className = "doc" + (selected === d ? " selected" : "");
     div.innerHTML =
       "<h3>" + d.titre + "</h3>" +
-      '<div class="meta"><span class="badge">' + d.categorie + "</span>" + (d.description || "") + "</div>" +
+      '<div class="meta"><span class="badge">' + d.bloc + "</span><span class=\"badge\">" + d.categorie + "</span></div>" +
       '<a class="dl" href="' + d.fichier + '" download>Télécharger le PDF</a>';
     div.onclick = (e) => {
       if (e.target.tagName === "A") return;
@@ -144,7 +182,5 @@ searchEl.addEventListener("input", render);
 render();
 </script>
 
-<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" nonce="7hazQnXkguUliQK5abJnvQ==" data-cf-beacon='{"version":"2024.11.0","token":"36b4216ae2dc4d5488c249161e71fe1e","spa":2}' crossorigin="anonymous"></script>
-<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" nonce="rEbaCzaWRIJWzjGb9RcLZQ==" data-cf-beacon='{"version":"2024.11.0","token":"36b4216ae2dc4d5488c249161e71fe1e","spa":2}' crossorigin="anonymous"></script>
 </body>
 </html>
