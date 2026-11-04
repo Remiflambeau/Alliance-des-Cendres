@@ -33,6 +33,7 @@
   .doc h3 { font-size: 1.05rem; margin-bottom: 4px; }
   .doc .meta { color: var(--muted); font-size: .82rem; }
   .badge { display: inline-block; font-size: .72rem; text-transform: uppercase; letter-spacing: .8px; color: var(--accent); border: 1px solid var(--accent2); border-radius: 4px; padding: 1px 7px; margin-right: 8px; }
+  .byline { font-style: italic; }
   .dl { margin-top: 8px; font-size: .85rem; color: var(--accent); text-decoration: none; border-bottom: 1px dotted var(--accent2); }
   .dl:hover { color: #f0a85a; }
   #preview { position: relative; }
@@ -98,16 +99,15 @@ const DOCS = [
   { titre: "Auriana", bloc: "Personnages", categorie: "Grogs", fichier: "Auriana .pdf" },
   { titre: "Pietro", bloc: "Personnages", categorie: "Grogs", fichier: "Pietro .pdf" },
   { titre: "Toque Rouge — Alois de Blois", bloc: "Personnages", categorie: "PNJ divers", fichier: "Toque Rouge Alois de Blois.pdf" },
-  { titre: "Langue de vipère", bloc: "Scénarios", categorie: "Tales of the Dark Ages", fichier: "Langue de vipère.pdf" },
-  { titre: "Héritage", bloc: "Scénarios", categorie: "Tales of the Dark Ages", fichier: "Heritage Ars Magica.pdf" },
-  { titre: "Bosquet des crânes", bloc: "Scénarios", categorie: "Tales of the Dark Ages", fichier: "Bosquet de Cranes.pdf" },
-  { titre: "La Goule de Saint Lazare", bloc: "Scénarios", categorie: "Tales of the Dark Ages", fichier: "La goule de Saint Lazarre.pdf" },
-  { titre: "Beaucoup de bruit pour rien", bloc: "Scénarios", categorie: "Casus Belli", fichier: "Beaucoup de bruit pour rien.pdf" },
-  { titre: "Le Fou de Dieu", bloc: "Scénarios", categorie: "Casus Belli", fichier: "Le Fou de Dieu.pdf" },
-  { titre: "Aide de jeu — Langue de vipère", bloc: "Aides de jeu", categorie: "Tales of the Dark Ages", fichier: "Aides de jeux Langue de Vipere.pdf" },
-  { titre: "Aide de jeu — Héritage", bloc: "Aides de jeu", categorie: "Tales of the Dark Ages", fichier: "Aide de jeu Héritage.pdf" },
-  { titre: "Aide de jeu — Bosquet des crânes", bloc: "Aides de jeu", categorie: "Tales of the Dark Ages", fichier: "Aide de jeu Bosquet des cranes.pdf" },
-  { titre: "Aide de jeu — La Goule de Saint Lazare", bloc: "Aides de jeu", categorie: "Tales of the Dark Ages", fichier: "Aides de jeux Goule de Saint Lazare.pdf" },
+  { titre: "Langue de vipère", bloc: "Scénarios", categorie: "Tales of the Dark Ages", fichier: "Langue de vipère.pdf", auteur: "Texte original : Thomas M. Kane" },
+  { titre: "Héritage", bloc: "Scénarios", categorie: "Tales of the Dark Ages", fichier: "Heritage Ars Magica.pdf", auteur: "Texte original : James P. Buchanan" },
+  { titre: "Bosquet des crânes", bloc: "Scénarios", categorie: "Tales of the Dark Ages", fichier: "Bosquet de Cranes.pdf", auteur: "Texte original : Thomas M. Kane" },
+  { titre: "La Goule de Saint Lazare", bloc: "Scénarios", categorie: "Tales of the Dark Ages", fichier: "La goule de Saint Lazarre.pdf", auteur: "Texte original : John Nephew" },
+  { titre: "Beaucoup de bruit pour rien", bloc: "Scénarios", categorie: "Casus Belli", fichier: "Beaucoup de bruit pour rien.pdf", auteur: "Texte original : Fabrice Colin" },
+  { titre: "Le Fou de Dieu", bloc: "Scénarios", categorie: "Casus Belli", fichier: "Le Fou de Dieu.pdf", auteur: "Texte original : Tristan Lhomme" },
+  { titre: "Aide de jeu — Langue de vipère", bloc: "Aides de jeu", categorie: "Tales of the Dark Ages", fichier: "Aides de jeux Langue de Vipere.pdf", auteur: "D'après le scénario de Thomas M. Kane" },
+  { titre: "Aide de jeu — Héritage", bloc: "Aides de jeu", categorie: "Tales of the Dark Ages", fichier: "Aide de jeu Héritage.pdf", auteur: "D'après le scénario de James P. Buchanan" },  { titre: "Aide de jeu — Bosquet des crânes", bloc: "Aides de jeu", categorie: "Tales of the Dark Ages", fichier: "Aide de jeu Bosquet des cranes.pdf", auteur: "D'après le scénario de Thomas M. Kane" },
+  { titre: "Aide de jeu — La Goule de Saint Lazare", bloc: "Aides de jeu", categorie: "Tales of the Dark Ages", fichier: "Aides de jeux Goule de Saint Lazare.pdf", auteur: "D'après le scénario de John Nephew" },
 ];
 
 /* -------- Rien à modifier ci-dessous -------- */
@@ -166,7 +166,7 @@ function render() {
     div.className = "doc" + (selected === d ? " selected" : "");
     div.innerHTML =
       "<h3>" + d.titre + "</h3>" +
-      '<div class="meta"><span class="badge">' + d.bloc + "</span><span class=\"badge\">" + d.categorie + "</span></div>" +
+      '<div class="meta"><span class="badge">' + d.bloc + "</span><span class=\"badge\">" + d.categorie + "</span>" + (d.auteur ? ' <span class="byline">' + d.auteur + "</span>" : "") + "</div>" +
       '<a class="dl" href="' + d.fichier + '" download>Télécharger le PDF</a>';
     div.onclick = (e) => {
       if (e.target.tagName === "A") return;
@@ -184,6 +184,6 @@ searchEl.addEventListener("input", render);
 render();
 </script>
 
-<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" nonce="127s+QbPbuvHfdx9t8Oa2Q==" data-cf-beacon='{"version":"2024.11.0","token":"36b4216ae2dc4d5488c249161e71fe1e","spa":2}' crossorigin="anonymous"></script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" nonce="NrZH+bpZWobMff4x6tf0wQ==" data-cf-beacon='{"version":"2024.11.0","token":"36b4216ae2dc4d5488c249161e71fe1e","spa":2}' crossorigin="anonymous"></script>
 </body>
 </html>
